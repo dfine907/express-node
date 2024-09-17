@@ -12,8 +12,6 @@ app.get('/hello', (req, res) => {
 
 app.use("/api/v1/tasks", tasks)
 
-
-
 /* Pseudo Code - what routes I need
 app.get('/api/v1/tasks')   - gets ALL tasks
 app.post('/api/v1/tasks')   - creates a new task
