@@ -1,13 +1,22 @@
 const Task = require('../models/Task')
 
-
 const getAllTasks = (req, res) => {
   res.send('Get all tasks')
 }
 
+/* BEFORE ADDING SCHEMA
+const createTask = (req, res) => {
+  res.json(req.body)
+}
+*/
+//AFTER ADDING: You CAN Hard code instead of using create
 const createTask = async (req, res) => {
-  const task = await Task.create(req.body)
-  res.status(201).json({task})
+  try {
+    const task = await Task.create(req.body)
+    res.status(201).json({ task })
+  } catch (error) {
+    res.status(500).json({ msg: error })
+  }
 }
 
 const getTask = (req, res) => {
