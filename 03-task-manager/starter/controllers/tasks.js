@@ -1,10 +1,30 @@
 const Task = require('../models/Task')
 
+// const getAllTasks = async (req, res) => {
+//   // res.send('Get all tasks')
+//   try {
+//     const tasks = await Task.find({})
+
+//     res.status(200).json({ tasks: tasks })
+//   } catch (error) {
+//     res.status(500).json({ msg: error })
+//   }
+// }
+
+// REFACTORED FROM ABOVE:
+
 const getAllTasks = async (req, res) => {
   // res.send('Get all tasks')
   try {
     const tasks = await Task.find({})
-    res.status(200).json({ tasks: tasks })
+
+    res.status(200).json({ tasks: tasks }) 
+
+    //other options but will cause errors
+    // res.status(200).json({ tasks: tasks, amount:tasks.length })
+    // res.status(200).json({ success: true, data:{tasks, nbHits: tasks.length} })
+
+
   } catch (error) {
     res.status(500).json({ msg: error })
   }
@@ -124,5 +144,5 @@ module.exports = {
   createTask,
   getTask,
   updateTask,
-  deleteTask
+  deleteTask,
 }
