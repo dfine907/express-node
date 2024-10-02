@@ -16,25 +16,29 @@ app.use(express.json())
 // routes
 
 app.get('/', (req, res) => {
-    res.send('<h1>Store API</h1><a href="/api/v1/products">products route</a>');
-  })
+  res.send(
+    '<h1>Store API</h1><a href="/api/v1/products">products route</a>'
+  )
+})
 
-app.use('/api/v1/products',productsRouter)
+app.use('/api/v1/products', productsRouter)
 
 //products route
-
 app.use(notFoundMiddleware)
 app.use(errorHandlerMiddleware)
 
-const port =process.env.PORT || 3000
+const port = process.env.PORT || 3000
 
 const start = async () => {
-    try {
-        //connect DB
-        await connectDB(process.env.MONGO_URI)
-        app.listen(port, console.log(`Server listening on PORT ${port} ...`))
-    } catch (error) {
-        console.log(error)
-    }
+  try {
+    //connecting DB to the DB first then sever
+    await connectDB(process.env.MONGO_URI)
+    app.listen(
+      port,
+      console.log(`Server listening on PORT ${port} ...`)
+    )
+  } catch (error) {
+    console.log(error)
+  }
 }
 start()
