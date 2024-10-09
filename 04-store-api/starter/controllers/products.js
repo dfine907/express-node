@@ -52,6 +52,40 @@ const getAllProducts = async (req, res) => {
     })
   }
 
+  // USING NO REGEX: 
+  // if (numericFilters) {
+  
+  //   const options = ['price', 'rating']
+  //   let filters = numericFilters.split(',')
+
+  //   filters.forEach((filter) => {
+  //     let operator
+  //     let field
+  //     let value
+
+  //     if (filter.includes('>=')) {
+  //       ;[field, value] = filter.split('>=')
+  //       operator = '$gte'
+  //     } else if (filter.includes('<=')) {
+  //       ;[field, value] = filter.split('<=')
+  //       operator = '$lte'
+  //     } else if (filter.includes('>')) {
+  //       ;[field, value] = filter.split('>')
+  //       operator = '$gt'
+  //     } else if (filter.includes('<')) {
+  //       ;[field, value] = filter.split('<')
+  //       operator = '$lt'
+  //     } else if (filter.includes('=')) {
+  //       ;[field, value] = filter.split('=')
+  //       operator = '$eq'
+  //     }
+
+  //     if (options.includes(field)) {
+  //       queryObject[field] = { [operator]: Number(value) }
+  //     }
+  //   })
+  // }
+
   console.log(queryObject)
 
   let result = Product.find(queryObject)
