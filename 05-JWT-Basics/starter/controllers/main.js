@@ -8,7 +8,9 @@ const login = async (req, res) => {
   if (!username || !password) {
     throw new CustomAPIError('Please provide email and password', 400)
   }
+  
 
+  // just for demo, nornally provided by the DB!!
   const id = new Date().getDate()
 
   const token = jwt.sign({ id, username }, process.env.JWT_SECRET, {
