@@ -1,8 +1,9 @@
 const User = require('../models/User')
 const { StatusCodes } = require('http-status-codes')
+const jwt = require('jsonwebtoken')
 
 const register = async (req, res) => {
-/* BELOW IS THE CODE TO HASH BEFORE USING MONGOOSE - START...
+  /* BELOW IS THE CODE TO HASH BEFORE USING MONGOOSE - START...
   const { name, email, password } = req.body
   if(!name || !email || !password){
     throw new BadRequestError("Please provide name, email and password")
@@ -13,9 +14,15 @@ const register = async (req, res) => {
   END
   */
 
- /* Below is the REFACTORED CODE using the User schema:*/
+  /* Below is the REFACTORED CODE using the User schema:*/
   const user = await User.create({ ...req.body })
-  res.status(StatusCodes.CREATED).json({ user })
+  const token = jwt.sign(
+    { userId: user._id, name: user.name },
+    'jwtSecret',
+    { expiresIn: '30d' }
+  )
+
+  res.status(StatusCodes.CREATED).json({ user: {name: user.name} , token })
 }
 
 const login = async (req, res) => {
