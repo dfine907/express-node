@@ -21,7 +21,6 @@ app.use(morgan('tiny'))
 app.use(express.json())
 
 app.get('/', (req, res) => {
-  console.log(req.body)
   res.send('E-commerce API')
 })
 

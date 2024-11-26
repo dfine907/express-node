@@ -5,28 +5,28 @@ const UserSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, 'Please provide name'],
-    minLenth: 3,
-    maxLenght: 50,
+    minlength: 3,
+    maxlength: 50,
   },
-
   email: {
     type: String,
+    unique: true,
     required: [true, 'Please provide email'],
     validate: {
-       validator: validator.isEmail,
-        message: 'Please provide valid email'
-    }
+      validator: validator.isEmail,
+      message: 'Please provide valid email',
+    },
   },
-
   password: {
     type: String,
-    required: [true, 'Please provide a password'],
-    minLenth: 6,
+    required: [true, 'Please provide password'],
+    minlength: 6,
   },
-  roles: {
-    emun: ['admin', 'user'], 
-    default: 'user'
-  }
+  role: {
+    type: String,
+    enum: ['admin', 'user'],
+    default: 'user',
+  },
 })
 
 module.exports = mongoose.model('User', UserSchema)
