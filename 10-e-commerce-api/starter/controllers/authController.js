@@ -1,19 +1,28 @@
 const User = require('../models/User')
 const { StatusCodes } = require('http-status-codes')
 const CustomError = require('../errors')
-//utils here
+const jwt = require('jsonwebtoken')
+
 
 const register = async (req, res) => {
   //everything is accessible in req.body because of json middleware in app.js
-  const {email} = req.body
+  const { email, name, password } = req.body
 
-  const emailAlreadyExists = await User.findOne({email})
-    if(emailAlreadyExists){
-        throw new CustomError.BadRequestError("Email already in use")
-    }
+  const emailAlreadyExists = await User.findOne({ email })
+  if (emailAlreadyExists) {
+    throw new CustomError.BadRequestError('Email already in use')
+  }
 
-  const user = await User.create(req.body)
-  res.status(StatusCodes.CREATED).json({ user })
+    //First registered user is an admin
+  const isFirstAccount = await User.countDocuments({}) === 0
+  const role = isFirstAccount? 'admin' : 'user'
+
+  const user = await User.create({email, name, password, role})
+
+  const tokenUser = { name: user.name, userId: user._id, role:user.role}
+  const token = jwt.sign(tokenUser, 'jwtSecret', {expiresIn: '1d'} )
+
+  res.status(StatusCodes.CREATED).json({ user:tokenUser, token })
 }
 
 const login = async (req, res) => {
