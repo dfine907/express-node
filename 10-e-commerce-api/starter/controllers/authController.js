@@ -26,7 +26,7 @@ const register = async (req, res) => {
   attachCookiesToResponse({ res, user: tokenUser })
   res.status(StatusCodes.CREATED).json({ user: tokenUser })
 }
-// *****************  LOGIN IN *************************
+// *****************  LOGIN *************************
 const login = async (req, res) => {
 
   // firsrt destructure req.body has it all:
@@ -55,10 +55,15 @@ const login = async (req, res) => {
   // res.send('Login user')
 }
 
-// *****************  LOGIN OUT ************************
+// *****************  LOGOUT ************************
 
 const logout = async (req, res) => {
-  res.send('Logout user')
+  res.cookie('token', 'logout', {
+    httpOnly: true,
+    expires:new Date(Date.now() + 5 * 1000)
+  })
+  res.status(StatusCodes.OK).json( {msg: 'User logged out!!'})
+  // res.send('Logout user')
 }
 
 module.exports = {
