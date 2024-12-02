@@ -9,7 +9,7 @@ const {
     updateUserPassword
 } = require('../controllers/userController')
 
-//ALL the routes will be authenticated
+//**** ALL the routes will be authenticated from middleware
 //and some of the routes (like admin, will have only accessible with admin privileges)
 router.route('/').get(getAllUsers)
 

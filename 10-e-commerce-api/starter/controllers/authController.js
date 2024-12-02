@@ -1,7 +1,6 @@
 const User = require('../models/User')
 const { StatusCodes } = require('http-status-codes')
 const CustomError = require('../errors')
-const jwt = require('jsonwebtoken')
 const { attachCookiesToResponse } = require('../utils')
 
 const register = async (req, res) => {
@@ -29,7 +28,6 @@ const register = async (req, res) => {
 
 
 const login = async (req, res) => {
-
   // firsrt destructure req.body has it all:
   const {email, password} = req.body
   if(!email || !password){
@@ -59,7 +57,8 @@ const login = async (req, res) => {
 const logout = async (req, res) => {
   res.cookie('token', 'logout', {
     httpOnly: true,
-    expires:new Date(Date.now() + 5 * 1000)
+    // expires:new Date(Date.now() + 5 * 1000)
+    expires:new Date(Date.now())
   })
   res.status(StatusCodes.OK).json( {msg: 'User logged out!!'})
   // res.send('Logout user')

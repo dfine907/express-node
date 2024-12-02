@@ -28,8 +28,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/api/v1', (req, res) => {
-  console.log('COOKIES-Test: ', req.signedCookies)
-
+  console.log(req.signedCookies)
   res.send('E-commerce API')
 })
 

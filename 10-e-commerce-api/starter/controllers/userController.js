@@ -1,8 +1,3 @@
-const User = require('../models/User')
-const { StatusCodes } = require('http-status-codes')
-const CustomError = require('../errors')
-
-
 
 const getAllUsers = async (req, res) => {
   res.send('get all users route')
