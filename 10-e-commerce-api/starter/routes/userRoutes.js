@@ -13,10 +13,13 @@ const {
 //and some of the routes (like admin, will have only accessible with admin privileges)
 router.route('/').get(getAllUsers)
 
+//keep showMe first so that id is not confused in params
 router.route('/showMe').get(showCurrentUser)
-router.route('/updateUser').post(updateUser)
-router.route('/updateUserPassword').post(updateUserPassword)
 
+router.route('/updateUser').patch(updateUser)
+router.route('/updateUserPassword').patch(updateUserPassword)
+
+//this one is treated as param
 router.route('/:id').get(getSingleUser)
 
 module.exports = router
