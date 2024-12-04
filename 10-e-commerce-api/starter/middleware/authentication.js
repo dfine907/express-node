@@ -1,7 +1,7 @@
 const CustomError = require('../errors')
 const { isTokenValid } = require('../utils')
-const { StatusCodes } = require('http-status-codes')
 
+//middleware that 
 const authenticateUser = async (req, res, next) => {
   const token = req.signedCookies.token
 
@@ -15,6 +15,7 @@ const authenticateUser = async (req, res, next) => {
     const { name, userId, role } = isTokenValid({ token })
     req.user = { name, userId, role, }
     next()
+    
   } catch (error) {
     throw new CustomError.UnauthenticatedError(
       'Authentication invalid'
