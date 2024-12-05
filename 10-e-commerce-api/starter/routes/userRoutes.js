@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { authenticateUser } = require('../middleware/authentication')
+const { authenticateUser, authorizePermissions } = require('../middleware/authentication')
 
 const {
     getAllUsers,
@@ -11,8 +11,8 @@ const {
 } = require('../controllers/userController')
 
 //**** All the routes will be authenticated from middleware
-//later some of the routes (like admin, will have only accessible with admin privileges)
-router.route('/').get(authenticateUser, getAllUsers)
+//FIRST we need to check authenticated, THEN we checked for roles/permissions
+router.route('/').get(authenticateUser, authorizePermissions, getAllUsers)
 
 router.route('/showMe').get(showCurrentUser)
 
