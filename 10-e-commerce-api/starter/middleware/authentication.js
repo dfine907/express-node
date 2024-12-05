@@ -1,7 +1,7 @@
 const CustomError = require('../errors')
 const { isTokenValid } = require('../utils')
 
-//middleware that authenticates for each user
+//middleware checks for authenticated users
 const authenticateUser = async (req, res, next) => {
   const token = req.signedCookies.token
   if (!token) {
@@ -21,7 +21,7 @@ const authenticateUser = async (req, res, next) => {
   }
 }
 
-//middleware checks for authorized (I kept it together in the same file)
+//middleware checks for authorized roles
 const authorizePermissions = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
