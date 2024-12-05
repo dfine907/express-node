@@ -12,7 +12,7 @@ const {
 
 //**** All the routes will be authenticated from middleware
 //FIRST we need to check authenticated, THEN we checked for roles/permissions
-router.route('/').get(authenticateUser, authorizePermissions, getAllUsers)
+router.route('/').get(authenticateUser, authorizePermissions('admin', 'owner'), getAllUsers)
 
 router.route('/showMe').get(showCurrentUser)
 
