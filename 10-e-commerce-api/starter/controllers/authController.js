@@ -24,7 +24,7 @@ const register = async (req, res) => {
 
 
 const login = async (req, res) => {
-  // firsrt destructure req.body has it all:
+  // first destructure req.body has it all:
   const {email, password} = req.body
   if(!email || !password){
     throw new CustomError.BadRequestError('Please provide email and password')
@@ -41,7 +41,7 @@ const login = async (req, res) => {
   }
   const tokenUser = createTokenUser(user)
   attachCookiesToResponse({ res, user: tokenUser })
-  res.status(StatusCodes.CREATED).json({ user: tokenUser })
+  res.status(StatusCodes.OK).json({ user: tokenUser })
 
   // res.send('Login user')
 }
