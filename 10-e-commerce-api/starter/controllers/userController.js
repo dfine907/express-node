@@ -4,6 +4,7 @@ const CustomError = require('../errors')
 const {
   createTokenUser,
   attachCookiesToResponse,
+  checkPermissions
 } = require('../utils')
 
 const getAllUsers = async (req, res) => {
@@ -21,6 +22,8 @@ const getSingleUser = async (req, res) => {
       `No user with id: ${req.params.id}`
     )
   }
+  checkPermissions(req.user, user._id)
+  
   res.status(StatusCodes.OK).json({ user })
 }
 
@@ -28,27 +31,7 @@ const showCurrentUser = async (req, res) => {
   res.status(StatusCodes.OK).json({ user: req.user })
 }
 
-// * * * *  UPDATE USER WITH findOneAndUpdate * * * *
-// const updateUser = async (req, res) => {
-//   const { name, email } = req.body
-//   if (!name || !email) {
-//     throw new CustomError.BadRequestError(
-//       'Please provide email and password'
-//     )
-//   }
-
-//   const user = await User.findOneAndUpdate(
-//     { _id: req.user.userId },
-//     { email, name },
-//     { new: true, runValidators: true }
-//   )
-
-//   const tokenUser = createTokenUser(user)
-//   attachCookiesToResponse({ res, user: tokenUser })
-//   res.status(StatusCodes.OK).json({ user: tokenUser })
-// }
-
-// * * * * Update USER with user.save method * * * *
+// * * * * Update USER with user.save method (or findOneAndUpdate below) * * * *
 const updateUser = async (req, res) => {
   const { email, name } = req.body
   if (!email || !name) {
@@ -95,3 +78,24 @@ module.exports = {
   updateUser,
   updateUserPassword,
 }
+
+
+// * * * *  UPDATE USER WITH findOneAndUpdate * * * *
+// const updateUser = async (req, res) => {
+//   const { name, email } = req.body
+//   if (!name || !email) {
+//     throw new CustomError.BadRequestError(
+//       'Please provide email and password'
+//     )
+//   }
+
+//   const user = await User.findOneAndUpdate(
+//     { _id: req.user.userId },
+//     { email, name },
+//     { new: true, runValidators: true }
+//   )
+
+//   const tokenUser = createTokenUser(user)
+//   attachCookiesToResponse({ res, user: tokenUser })
+//   res.status(StatusCodes.OK).json({ user: tokenUser })
+// }
