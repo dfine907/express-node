@@ -3,28 +3,62 @@ const { StatusCodes } = require('http-status-codes')
 const CustomError = require('../errors')
 
 const createProduct = async (req, res) => {
-    //req.body.user comes from the middleware that uses JWT, etc
-    req.body.user = req.user.userId
-    const product = await Product.create(req.body)
-    
-  
-  res.status(StatusCodes.CREATED).json({product})
+  //req.body.user comes from the middleware that uses JWT, etc
+  req.body.user = req.user.userId
+  const product = await Product.create(req.body)
+  res.status(StatusCodes.CREATED).json({ product })
 }
 
 const getAllProducts = async (req, res) => {
-  res.send('Get all products route')
+  const product = await Product.find({})
+  res.status(StatusCodes.OK).json({ product, count: product.length })
 }
 
 const getSingleProduct = async (req, res) => {
-  res.send('Get single product')
+  const { id: productId } = req.params
+  const product = await Product.findOne({ _id: productId })
+  if (!product) {
+    throw new CustomError.NotFoundError(
+      `No product with ID: ${productId} found`
+    )
+  }
+  res.status(StatusCodes.OK).json({ product })
 }
 
+//admin status required
 const updateProduct = async (req, res) => {
-  res.send('Update a product')
+  const { id: productId } = req.params
+
+  const product = await Product.findOneAndUpdate(
+    { _id: productId },
+    req.body,
+    {
+      new: true,
+      runValidators: true,
+    }
+  )
+
+  if (!product) {
+    throw new CustomError.NotFoundError(
+      `No product with id : ${productId}`
+    )
+  }
+
+  res.status(StatusCodes.OK).json({ product })
 }
 
 const deleteProduct = async (req, res) => {
-  res.send('Product deleted!')
+  const { id: productId } = req.params
+  const product = await Product.findOne({ _id: productId })
+  if (!product) {
+    throw new CustomError.NotFoundError(
+      `No product with ID: ${productId} found`
+    )
+  }
+  await product.remove()
+  res
+    .status(StatusCodes.OK)
+    .json({ msg: 'Product succesfully removed!' })
 }
 
 const uploadImage = async (req, res) => {
