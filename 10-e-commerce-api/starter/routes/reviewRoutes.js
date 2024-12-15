@@ -5,8 +5,8 @@ const { authenticateUser } = require('../middleware/authentication')
 const {
   createReview,
   getAllReviews,
-  updateReview,
   getSingleReview,
+  updateReview,
   deleteReview,
 } = require('../controllers/reviewController')
 
