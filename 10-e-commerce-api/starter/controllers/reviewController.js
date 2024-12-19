@@ -1,5 +1,6 @@
 const Review = require('../models/Review')
 const Product = require('../models/Product')
+const checkPerissions = require('../utils')
 
 const { StatusCodes } = require('http-status-codes')
 const CustomError = require('../errors')
@@ -36,16 +37,16 @@ const getAllReviews = async (req, res) => {
 }
 
 const getSingleReview = async (req, res) => {
-  const{id:reviewId } = req.params
+  const { id: reviewId } = req.params
 
-  const review = await Review.findOne( {_id: reviewId})
+  const review = await Review.findOne({ _id: reviewId })
 
-  if(!review){
+  if (!review) {
     throw new CustomError.NotFoundError(
       `No reviews with ID: ${reviewId} yet`
     )
   }
-  res.status(StatusCodes.OK).json({ review})
+  res.status(StatusCodes.OK).json({ review })
 }
 
 const updateReview = async (req, res) => {
@@ -53,7 +54,20 @@ const updateReview = async (req, res) => {
 }
 
 const deleteReview = async (req, res) => {
-  res.send('review deleted!')
+  const { id: reviewId } = req.params
+
+  const review = await Review.findOne({ _id: reviewId })
+
+  if (!review) {
+    throw new CustomError.NotFoundError(
+      `No reviews with ID: ${reviewId} yet`
+    )
+  }
+
+  checkPerissions.checkPermissions(req.user, review.user)
+  await review.remove()
+
+  res.status(StatusCodes.OK).json({ msg: 'Success! Review deleted' })
 }
 
 module.exports = {
