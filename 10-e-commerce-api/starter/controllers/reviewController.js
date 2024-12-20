@@ -1,6 +1,6 @@
 const Review = require('../models/Review')
 const Product = require('../models/Product')
-const checkPerissions = require('../utils')
+const { checkPermissions } = require('../utils');
 
 const { StatusCodes } = require('http-status-codes')
 const CustomError = require('../errors')
@@ -60,14 +60,13 @@ const deleteReview = async (req, res) => {
 
   if (!review) {
     throw new CustomError.NotFoundError(
-      `No reviews with ID: ${reviewId} yet`
+      `No reviews with ID: ${reviewId}`
     )
   }
 
-  checkPerissions.checkPermissions(req.user, review.user)
-  await review.remove()
-
-  res.status(StatusCodes.OK).json({ msg: 'Success! Review deleted' })
+  checkPermissions(req.user, review.user);
+  await review.remove();
+  res.status(StatusCodes.OK).json({ msg: 'Success! Review removed' });
 }
 
 module.exports = {
