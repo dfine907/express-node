@@ -14,6 +14,8 @@ const {
   uploadImage,
 } = require('../controllers/productController')
 
+const {getSingleProductReviews} = require('../controllers/reviewController')
+
 //We only want the admin role to access these
 router
   .route('/')
@@ -28,5 +30,8 @@ router
   .get(getSingleProduct)
   .patch([authenticateUser, authorizePermissions('admin')], updateProduct)
   .delete([authenticateUser, authorizePermissions('admin')], deleteProduct)
+
+  router
+  .route('/:id/reviews').get(getSingleProductReviews)
 
   module.exports = router
