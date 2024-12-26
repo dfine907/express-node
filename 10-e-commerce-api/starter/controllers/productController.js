@@ -55,7 +55,7 @@ const deleteProduct = async (req, res) => {
     throw new CustomError.NotFoundError(
       `No product with ID: ${productId} found`
     )
-  }
+  }//use remove because findoneandelete will not remove all the other reviews.
   await product.remove()
   res
     .status(StatusCodes.OK)
