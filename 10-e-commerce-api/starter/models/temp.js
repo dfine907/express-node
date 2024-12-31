@@ -25,8 +25,8 @@ const agg = [
   },
 ]
 
-const client = await MongoClient.connect('')
-const coll = client.db('10-ECOMMERCE-API').collection('reviews')
-const cursor = coll.aggregate(agg)
-const result = await cursor.toArray()
-await client.close()
+// const client = await MongoClient.connect('')
+// const coll = client.db('10-ECOMMERCE-API').collection('reviews')
+// const cursor = coll.aggregate(agg)
+// const result = await cursor.toArray()
+// await client.close()
