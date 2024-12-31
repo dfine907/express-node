@@ -49,7 +49,7 @@ ReviewSchema.statics.calculateAverageRating = async function (
     },
   ])
 
-  console.log(result);
+  // console.log(result);
   
   try {
     await this.model('Product').findOneAndUpdate(
