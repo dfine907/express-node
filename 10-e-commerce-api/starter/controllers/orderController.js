@@ -1,9 +1,14 @@
-const Order = '../models/Order'
+const Order = require('../models/Order')
 const Product = require('../models/Product')
 
 const { StatusCodes } = require('http-status-codes')
 const CustomError = require('../errors')
 const { checkPermissions } = require('../utils')
+
+const fakeStripeAPI = async ({ amount, currency }) => {
+  const client_secret = 'someRandomValue'
+  return { client_secret, amount }
+}
 
 const createOrder = async (req, res) => {
   const { items: cartItems, tax, shippingFee } = req.body
@@ -16,17 +21,18 @@ const createOrder = async (req, res) => {
       'Please provide tax and shipping fee'
     )
   }
-  let order = []
+
+  let orderItems = []
   let subtotal = 0
 
   for (const item of cartItems) {
     const dbProduct = await Product.findOne({ _id: item.product })
     if (!dbProduct) {
       throw new CustomError.NotFoundError(
-        `No product with id ${dbProduct}`
+        `No product with id : ${item.product}`
       )
     }
-    const { name, price, image } = dbProduct
+    const { name, price, image, _id } = dbProduct
     const singleOrderItem = {
       amount: item.amount,
       name,
@@ -34,18 +40,32 @@ const createOrder = async (req, res) => {
       image,
       product: _id,
     }
-//add item to order
-orderItems = [...orderItems, singleOrderItem]
-// calcuate subtotal each iteration
-subtotal  += item.amount *price
-
+    // add item to order
+    orderItems = [...orderItems, singleOrderItem]
+    // calculate subtotal
+    subtotal += item.amount * price
   }
+  // calculate total
+  const total = tax + shippingFee + subtotal
+  // get client secret
+  const paymentIntent = await fakeStripeAPI({
+    amount: total,
+    currency: 'usd',
+  })
 
-  console.log(orderItems,);
-  console.log(subtotal)
-  
+  const order = await Order.create({
+    orderItems,
+    total,
+    subtotal,
+    tax,
+    shippingFee,
+    clientSecret: paymentIntent.client_secret,
+    user: req.user.userId,
+  })
 
-  res.send('ORDER CREATED thus far')
+  res
+    .status(StatusCodes.CREATED)
+    .json({ order, clientSecret: order.clientSecret })
 }
 
 const getAllOrders = async (req, res) => {
