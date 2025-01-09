@@ -75,7 +75,7 @@ const getAllOrders = async (req, res) => {
 
 const getSingleOrder = async (req, res) => {
   const { id: orderId } = req.params
-  const order = await Order.findOne({ id: orderId })
+  const order = await Order.findOne({ _id: orderId })
 
   if (!order) {
     throw new CustomError.NotFoundError(
@@ -93,20 +93,20 @@ const getCurrentUserOrders = async (req, res) => {
 
 const updateOrder = async (req, res) => {
   const { id: orderId } = req.params
-  const  {paymentIntentId} = req.body
+  const { paymentIntentId } = req.body
 
   const order = await Order.findOne({ _id: orderId })
-
   if (!order) {
     throw new CustomError.NotFoundError(
       `No order with id : ${orderId}`
     )
   }
+  console.log('req.user HERE: ', req.user); 
   checkPermissions(req.user, order.user)
 
- order.paymentIntentId = paymentIntentId
- order.status = 'paid'
- await order.save()
+  order.paymentIntentId = paymentIntentId
+  order.status = 'paid'
+  await order.save()
 
   res.status(StatusCodes.OK).json({ order })
 }

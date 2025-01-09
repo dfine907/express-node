@@ -23,6 +23,6 @@ router
 router
   .route('/:id')
   .get(authenticateUser, getSingleOrder)
-  .patch((authenticateUser, updateOrder))
+  .patch(authenticateUser, updateOrder)
 
 module.exports = router
